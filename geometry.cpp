@@ -18,13 +18,14 @@ public:
     Point(const Point &); // copy constructor
     ~Point(); // destructor
 
+    virtual double get_size() const; // length of point vector
+
     void set_value(int, double); // set value of one coordinate
     int get_dim() const { return dim; } // dim of space (define in-place)
-    double get_length() const; // length of point vector 
     string disp_Point() const; // show Point (const method)
     friend ostream & operator <<(ostream &, const Point &); // overload <<
 
-private:
+protected: // make them accessible by derived classes
     int     dim;
     double *coor;
 
@@ -39,9 +40,10 @@ public:
     Circle(const Circle &); // copy constructor
     ~Circle(); // destructor
 
+    virtual double get_size() const; // area of circle
+
     void set_radius(double); // set value of radius
     double get_radius() const { return radius; } // radius of circle
-    double get_area() const; // area of circle
     friend ostream & operator <<(ostream &, const Circle &); // overload <<
 
 private: 
@@ -94,7 +96,7 @@ void Point :: set_value(int i, double value) {
 }
 
 // compute length of vector
-double Point :: get_length() const {
+double Point :: get_size() const {
     if ( dim == 2 ) {
         return sqrt(pow(coor[0],2)+pow(coor[1],2));
     }
@@ -129,7 +131,7 @@ void Circle :: set_radius(double r) {
 }
 
 // get area of a circle 
-double Circle :: get_area() const {
+double Circle :: get_size() const {
     return MY_PI * pow(radius, 2);
 }
 
@@ -140,6 +142,7 @@ ostream & operator <<(ostream & out, const Point & pt) {
     return out; 
 }
 
+// overload << operator again. static polymorphism
 ostream & operator <<(ostream & out, const Circle & c) {
     out << c.disp_Point() << "--" << c.radius;
     return out; 
@@ -155,21 +158,24 @@ int main()
     cout << "Outside: " << xcoor[0] << ", " << xcoor[1] << ", " << xcoor[2] << endl;
 
     Point pt1 (xcoor[0], xcoor[1]);
-    cout << "Point 1: " << pt1 << " = " << pt1.get_length() << endl;
+    cout << "Point 1: " << pt1 << " = " << pt1.get_size() << endl;
 
     Point pt2 (xcoor[0], xcoor[1], xcoor[2]);
-    cout << "Point 2: " << pt2 << " = " << pt2.get_length() << endl;
+    cout << "Point 2: " << pt2 << " = " << pt2.get_size() << endl;
 
     Point pt3 = pt2; pt3.set_value(2, 1.0/3.0);
-    cout << "Point 3: " << pt3 << " = " << pt3.get_length() << endl;
+    cout << "Point 3: " << pt3 << " = " << pt3.get_size() << endl;
 
     Circle c1;
-    cout << "Circle 1:" << c1 << endl;
+    cout << "Circle 1:" << c1 << " = " << c1.get_size() << endl;
 
     c1.set_radius(1.5);
 
     Circle c2 = c1;
-    cout << "Circle 2:" << c2 << endl;
+    cout << "Circle 2:" << c2 << " = " << c2.get_size() << endl;
+
+    Point &center = c2;
+    cout << "Center: " << center << " = " << center.get_size() << endl;
 
     cout << "Test finished!" << endl;
 }
