@@ -19,3 +19,15 @@ int main()
   
   return 0;
 }
+
+/* Note:
+
+   gcc perf1.c -std=c99 -o perf.ex
+
+   1. static allocation of arrays
+   2. un-initialized arrays
+   3. order of loops
+   4. requires c99 standard
+   5. lack of comments
+
+ */
